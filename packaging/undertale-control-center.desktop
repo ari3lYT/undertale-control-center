@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=Undertale Control Center
+Name[ru]=Менеджер Undertale
+Comment=Local save editor and runtime dashboard for UNDERTALE
+Comment[ru]=Локальный редактор сохранений и runtime-панель UNDERTALE
+Exec=undertale-control-center
+Icon=undertale-control-center
+Terminal=false
+Categories=Game;Utility;
+Keywords=Undertale;save;editor;FUN;
+

@@ -27,6 +27,17 @@ Disk editing and backup features work without patching the game. Live memory fea
 
 ## Quick start
 
+### Ready-to-run Linux packages
+
+Download the latest files from [GitHub Releases](https://github.com/ari3lYT/undertale-control-center/releases/latest):
+
+- `undertale-control-center_VERSION_amd64.deb` — install on Debian, Ubuntu, Mint, and compatible distributions, then launch **Undertale Control Center** from the application menu;
+- `undertale-control-center-vVERSION-linux-x86_64.tar.gz` — portable build: extract it and run `./undertale-control-center`.
+
+The packaged application includes Python and all application files. It does not include UNDERTALE or a patched `game.unx`.
+
+### Run from source
+
 ```bash
 git clone https://github.com/ari3lYT/undertale-control-center.git
 cd undertale-control-center
@@ -60,11 +71,10 @@ Application state, slots, and history are stored in `~/.local/share/undertale-co
 
 This release targets the native Linux GameMaker build distributed through Steam, including the current anniversary build and bonus variants exposed by that build. Windows and macOS discovery are not implemented.
 
-The UI is currently Russian. This README is English by default; the complete Russian guide is in [`README.ru.md`](README.ru.md).
+The interface can be switched between English and Russian with the `RU / EN` control in the top bar, and the choice is remembered by the browser. Detailed flag, room, and plot annotations extracted from an installed localized build may retain that build's language.
 
 ## Legal
 
 This is an unofficial fan tool and is not affiliated with Toby Fox, 8-4, or Valve. No game executable, `game.unx`, music, sprites, dialogue dump, or other commercial game asset is included. The optional bridge is source-only and must be applied to the user's own copy.
 
 Project code is available under the [MIT License](LICENSE). UNDERTALE and all game assets remain the property of their respective owners.
-
