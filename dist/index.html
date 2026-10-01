@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Undertale Control Center</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/responsive.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand"><span class="soul">♥</span><div><b>UNDERTALE</b><small>CONTROL CENTER</small></div></div>
+      <nav id="nav">
+        <button class="nav-item active" data-view="dashboard"><span>◈</span>Обзор</button>
+        <button class="nav-item" data-view="fun"><span>✦</span>FUN-маршрут</button>
+        <button class="nav-item" data-view="save"><span>▣</span>Редактор сейва</button>
+        <button class="nav-item" data-view="flags"><span>⌁</span>Все флаги</button>
+        <button class="nav-item" data-view="story"><span>↝</span>Сюжет</button>
+        <button class="nav-item" data-view="history"><span>↶</span>История и откат</button>
+        <button class="nav-item" data-view="dev"><span>⌘</span>Devtools</button>
+        <button class="nav-item" data-view="guide"><span>?</span>Как всё устроено</button>
+      </nav>
+      <div class="sidebar-foot">
+        <div class="game-state"><i id="gameDot"></i><span id="gameState">Проверка Undertale…</span></div>
+        <button class="primary full" id="launchBtn">▶ Запустить Undertale</button>
+      </div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div><h1 id="viewTitle">Обзор</h1><p id="viewSub">Живое состояние игры и сохранения</p></div>
+        <div class="top-actions"><button id="snapshotBtn">＋ Снимок</button><button id="refreshBtn">↻ Обновить</button></div>
+      </header>
+
+      <section class="view active" id="view-dashboard">
+        <div class="hero card">
+          <div><span class="eyebrow">ТЕКУЩЕЕ СОСТОЯНИЕ</span><h2 id="heroTitle">Читаю сохранение…</h2><p id="heroText"></p></div>
+          <div class="hero-actions"><button class="primary" data-go="save">Редактировать сейв</button><button data-go="history">Посмотреть историю</button></div>
+        </div>
+        <div class="stats" id="mainStats"></div>
+        <div class="grid two">
+          <article class="card"><div class="card-head"><div><span class="eyebrow">ДИАГНОСТИКА</span><h3>Целостность сохранения</h3></div><span class="pill" id="validationPill">…</span></div><div id="diagnostics"></div></article>
+          <article class="card"><div class="card-head"><div><span class="eyebrow">LIVE MEMORY</span><h3>Процесс Undertale</h3></div><span class="pulse" id="memoryPulse"></span></div><div id="memoryCards" class="mini-grid"></div><canvas id="memoryChart" height="150"></canvas></article>
+        </div>
+        <article class="card"><div class="card-head"><div><span class="eyebrow">ПОСЛЕДНИЕ СОБЫТИЯ</span><h3>Что менялось</h3></div><button data-go="history">Вся история →</button></div><div id="recentEvents" class="timeline compact"></div></article>
+      </section>
+
+      <section class="view" id="view-fun">
+        <div class="section-intro"><div><h2>Все FUN-события в порядке прохождения</h2><p>Маршрут составлен по реальному порядку комнат. Видно место, условия, шанс и готовность текущего сейва.</p></div><label class="select-wrap">Сейв<select id="funSave"><option>file0</option><option>file9</option></select></label></div>
+        <div class="toolbar"><input id="funSearch" type="search" placeholder="Поиск события, региона или комнаты…"><label class="toggle"><input type="checkbox" id="onlyReady"><span></span>Только доступные сейчас</label></div>
+        <div id="funRoute" class="route"></div>
+      </section>
+
+      <section class="view" id="view-save">
+        <div class="section-intro"><div><h2>Структурированный редактор</h2><p>До записи — проверка формата, известных зависимостей и план изменений. Это не полная эмуляция всех проверок игры. Правки файла не заменяют уже загруженную память.</p></div><label class="select-wrap">Файл<select id="saveSelect"><option>file0</option><option>file9</option></select></label></div>
+        <div class="save-layout">
+          <aside class="save-sections" id="saveSections">
+            <button class="active" data-save-section="core">Основное</button><button data-save-section="inventory">Инвентарь и телефон</button><button data-save-section="world">Мир и время</button><button data-save-section="raw">Служебные поля</button><button data-save-section="ini">INI и управление</button>
+          </aside>
+          <div>
+            <div id="saveEditor" class="card editor-card"></div>
+            <div class="sticky-actions"><span id="dirtyState">Нет изменений</span><button id="discardChanges">Сбросить</button><button class="primary" id="reviewChanges" disabled>Проверить и применить</button></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-flags">
+        <div class="section-intro"><div><h2>Флаги: действия и последствия</h2><p id="flagCoverage">Назначение, варианты выбора и условия получения. Нерасшифрованные поля отмечены отдельно.</p></div><label class="select-wrap">Сейв<select id="flagSave"><option>file0</option><option>file9</option></select></label></div>
+        <div class="toolbar flags-toolbar"><input id="flagSearch" type="search" placeholder="Номер, персонаж, событие, объект…"><select id="flagFilter"><option value="used">С найденными обращениями</option><option value="all">Все 512</option><option value="unused">Без прямых обращений (не значит свободные)</option><option value="changed">Ненулевые</option></select></div>
+        <p id="flagMemoryNote" class="hint">Значения в памяти и на диске отображаются отдельно. Неизвестное значение не заменяется нулём.</p>
+        <div class="split-panel"><div class="table-wrap"><table><thead><tr><th>ID</th><th>В сейве</th><th>В памяти</th><th>Назначение</th><th>Проверка смысла</th></tr></thead><tbody id="flagsTable"></tbody></table></div><aside class="detail" id="flagDetail"><div class="empty">Выбери флаг слева</div></aside></div>
+      </section>
+
+      <section class="view" id="view-story">
+        <article class="card"><h2>Сплиты прохождения</h2><p id="runtimeStatus">Проверка связи с игрой…</p><p>IGT — внутренние тики / 30, не секундомер реального времени. При паузе счётчик останавливается; ускорение debug меняет его темп. RTA измеряется часами процесса. Запись начинается с подключения: прошлые времена не выдумываются.</p><div id="splitTimes"></div></article>
+        <div class="section-intro"><div><h2>Карта сюжетных этапов</h2><p>120 разобранных значений <code>global.plot</code>, включая вычисляемые 54 и 56. Установка меняет только число: не проигрывает сцену и не выставляет все связанные флаги.</p></div><label class="select-wrap">Сейв<select id="storySave"><option>file0</option><option>file9</option></select></label></div>
+        <div class="toolbar"><input id="plotSearch" type="search" placeholder="Ториэль, Андайн, Ядро, 122…"><span class="current-chip" id="currentPlot">Текущий plot: —</span></div>
+        <div id="plotTimeline" class="plot-timeline"></div>
+      </section>
+
+      <section class="view" id="view-history">
+        <div class="section-intro"><div><h2>История памяти и файлов</h2><p>В памяти показываются только изменения полей сохранения: флаги, сюжет, комната, характеристики и инвентарь. IGT указывается на момент изменения, без отдельных событий для каждого тика. Файлы проверяются каждые 0,5 секунды; совпадающие изменения file0/file9 объединены.</p></div><div class="legend"><span><i class="dot game"></i>файлы</span><span><i class="dot center"></i>менеджер</span><span><i class="dot external"></i>внешнее</span><span><i class="dot memory"></i>память</span></div></div>
+        <div class="toolbar"><input id="historySearch" type="search" placeholder="Искать по полю, флагу или объяснению…"><select id="historyCause"><option value="all">Все источники</option><option value="game">Файлы игры</option><option value="memory">Память игры</option><option value="control-center">Центр</option><option value="external">Внешнее</option><option value="rollback">Откаты</option></select></div>
+        <p class="hint">Координаты, анимация и служебные буферы не входят в историю. Игра должна быть перезапущена после обновления модуля, чтобы перестать писать их в первичный журнал.</p>
+        <div id="historyTimeline" class="timeline"></div>
+      </section>
+
+      <section class="view" id="view-dev">
+        <div class="danger-banner"><span>!</span><div><b>Devtools меняют правила игры</b><small>Отладочные клавиши выполняются самой игрой и могут изменить маршрут. Резервные слоты сохраняют файлы, не всю память процесса.</small></div></div>
+        <div class="grid two">
+          <article class="card"><span class="eyebrow">ЖИВОЕ УПРАВЛЕНИЕ</span><h3>Hot-подмена флага</h3><p>Меняет <code>global.flag</code> в памяти и обновляет комнату. Команда ждёт выхода из боя/диалога; выполнение подтверждается игрой. Для записи результата на диск нужна звезда. Не является полным откатом памяти.</p><div class="inline-form"><input id="hotFlagIndex" type="number" min="0" max="511" placeholder="ID флага"><input id="hotFlagValue" type="number" step="any" placeholder="Значение"><button class="primary" id="hotFlagBtn">Применить live</button></div><div id="hotFlagHint" class="hint"></div></article>
+          <article class="card"><span class="eyebrow">СЕРВИС</span><h3>Быстрые действия</h3><div class="action-list"><button id="openSaveFolder">Открыть папку сохранений <span>↗</span></button><button id="manualSnapshot">Сделать защитный снимок <span>＋</span></button><button id="validateNow">Проверить оба сейва <span>✓</span></button></div></article>
+        </div>
+        <article class="card"><div class="card-head"><div><span class="eyebrow">ВСТРОЕННЫЙ DEBUG</span><h3>Функции, найденные в коде игры</h3></div><span class="pill warn">global.debug = 1</span></div><div id="devGrid" class="dev-grid"></div></article>
+        <article class="card" id="variableMonitor"><h3>Поля сохранения в памяти игры</h3>
+          <p id="variableStatus">Проверка модуля…</p>
+          <p class="hint">Только чтение. Показываются поля, записываемые в file0/file9, кроме непрерывного таймера и музыки. Изменение комнаты сохраняется; время указывается при изменениях. Это не перехват каждого присваивания: несколько изменений внутри кадра могут слиться. Откат файлов не откатывает всю память.</p>
+          <div class="toolbar"><input id="variableSearch" type="search" aria-label="Поиск переменной" placeholder="gold, currentroom, item, flag[5]…"><button id="variablePause">Приостановить таблицу</button><button id="variablePrevious">←</button><span id="variablePage"></span><button id="variableNext">→</button></div>
+          <div class="table-wrap variable-table"><table><thead><tr><th>Переменная / объект</th><th>Тип</th><th>В памяти</th><th>Последний тик изменения</th></tr></thead><tbody id="variableRows"></tbody></table></div>
+          <h4>Последние изменения полей сохранения</h4><p class="hint">Начальный снимок не считается изменением. У каждого изменения есть игровой тик (IGT).</p><div id="variableChanges" class="variable-changes"></div>
+        </article>
+        <article class="card"><div class="card-head"><div><span class="eyebrow">ПОТРЕБЛЕНИЕ RAM</span><h3>Размер памяти процесса — не значения переменных</h3></div><span id="memoryPid"></span></div><div id="memoryFull" class="memory-full"></div></article>
+        <article class="card"><h3>Изменения игровых флагов в памяти</h3><p>Модуль сравнивает 512 флагов каждый игровой кадр. Это журнал значений, не снимок всей памяти процесса; несколько присваиваний внутри одного кадра могут слиться в одно.</p><div id="liveFlagChanges"></div></article>
+      </section>
+
+      <section class="view" id="view-guide">
+        <div class="section-intro"><div><h2>Файлы и загрузка состояния</h2><p>Что записывает игра, когда читает файлы и какие данные остаются после загрузки или Reset.</p></div></div>
+        <div class="guide-grid">
+          <article class="card guide-card"><span>01</span><h3>file0 — звезда; file9 — контрольная точка</h3><p><b>file0</b> загружается при обычном продолжении. <b>file9</b> читается через <code>scr_tempload</code> после экрана смерти. <code>scr_tempsave</code> пишет его перед отдельными сценами, поездками и боями; звезда записывает и file0, и file9. После смерти можно вернуться не к последней звезде.</p><p>Это не файл, принадлежащий исключительно Флауи. Его манипуляции сохранением — отдельные сценарии; приписывать все изменения file9 Флауи неправильно.</p></article>
+          <article class="card guide-card"><span>02</span><h3>undertale.ini</h3><p>Сводка для стартового экрана и межсессионная память: имя, LOVE, комната, время, убийства, FUN, прошлые встречи и финальные состояния. Не заменяет file0. Новый live-модуль принимает команды через отдельный ucc-command.ini; при смене FUN синхронизируется General/fun.</p></article>
+          <article class="card guide-card"><span>03</span><h3>config.ini</h3><p>Язык, выбранный бонусный режим и раскладка геймпада. Здесь не лежит сюжет — только настройки оболочки.</p></article>
+          <article class="card guide-card"><span>04</span><h3>game.unx</h3><p>Сама игра: комнаты, объекты, скрипты, звуки и таблицы русского текста. Каталоги предметов, флагов, комнат и сюжетных значений извлечены именно отсюда.</p></article>
+          <article class="card guide-card"><span>05</span><h3>Флауи, file8 и память о концовках</h3><p>В финальной последовательности Азгора игра переключается на file8. При старте <code>obj_time</code> читает <code>FFFFF/E</code>, <code>FFFFF/F</code> и <code>EndF/EndF</code> из undertale.ini: эти ключи направляют к сценам Флауи, финальному выбору или выходу из замка вместо обычного продолжения. Бой Флауи также использует собственные состояния — это не обычное сохранение в file9.</p></article>
+          <article class="card guide-card"><span>06</span><h3>system_information_962 / 963</h3><p>Следы уничтожения мира и последующего соглашения, не обычный прогресс. При наличии 962 и отсутствии 963 стартовый код отправляет в пустоту. Конец убийственного маршрута удаляет обычные file0–file9 и INI и создаёт 962. Не удаляй их для «чистки мусора».</p></article>
+          <article class="card guide-card"><span>07</span><h3>Живая память и журнал центра</h3><p><code>ucc-events.log</code> — добавленный журнал: переходы plot, время и изменения flag[]. <code>ucc-command.ini</code> — одноразовая live-команда с номером подтверждения. Это не оригинальные файлы Undertale. Изменение сейва на диске не заменяет уже загруженную память; откат файлов безопаснее делать после закрытия игры.</p></article>
+        </div>
+        <article class="card"><span class="eyebrow">ФОРМАТ FILE0/FILE9</span><h3>Разметка строк, как её читает scr_load</h3><div class="layout-table" id="saveLayout"></div></article>
+        <article class="card prose"><span class="eyebrow">КАК ПРОХОДИТ ИЗМЕНЕНИЕ</span><h3>Проверяемая транзакция</h3><div class="flow"><div><b>1</b><span>Ты выбираешь значение</span></div><i>→</i><div><b>2</b><span>Центр строит diff</span></div><i>→</i><div><b>3</b><span>Показывает конфликты</span></div><i>→</i><div><b>4</b><span>Ты принимаешь нужные исправления</span></div><i>→</i><div><b>5</b><span>Снимок и запись</span></div></div><p>Игра принимает почти любое конечное число, но это не значит, что оно имеет смысл. Поэтому центр разделяет «технически читается» и «реально используется кодом», не выдавая догадки за факты.</p></article>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal"><div class="modal-head"><div><span class="eyebrow">ПРОВЕРКА ТРАНЗАКЦИИ</span><h2>Что изменится</h2></div><button class="icon-btn" id="closeModal">×</button></div><div id="modalBody"></div><div class="modal-actions"><button id="cancelApply">Отмена</button><button class="primary" id="confirmApply">Применить выбранное</button></div></div>
+  </div>
+  <div id="toastStack" class="toast-stack"></div>
+  <script src="/app.js?v=20260921-details-fix"></script>
+  <link rel="stylesheet" href="/controls.css">
+  <script src="/controls.js"></script>
+  <link rel="stylesheet" href="/variables.css">
+  <script src="/variables.js"></script>
+  <script src="/live.js"></script>
+</body>
+</html>

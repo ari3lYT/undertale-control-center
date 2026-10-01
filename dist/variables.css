@@ -1,0 +1,16 @@
+.memory-different{color:#ffca68;background:#6d4e1526}
+.variable-table{max-height:520px;overflow:auto}
+.variable-table table{width:100%;table-layout:fixed}
+.variable-table th:first-child{width:46%}
+.variable-table th:nth-child(2){width:14%}
+.variable-table td{overflow-wrap:anywhere;white-space:normal;vertical-align:top}
+.variable-changes{max-height:460px;overflow:auto}
+.variable-changes code{white-space:pre-wrap;overflow-wrap:anywhere}
+#variableMonitor .toolbar{flex-wrap:wrap}
+#variableMonitor .toolbar input{min-width:180px;flex:1}
+#variableMonitor{min-width:0}
+#flagMemoryNote{overflow-wrap:anywhere}
+.dot.memory{background:#c88bff}
+.memory-saved{color:#68d7ae;font-size:13px}
+.file-targets{display:block;color:var(--muted);font-size:11px;margin-top:4px}
+#view-history .legend{flex-wrap:wrap;min-width:210px}

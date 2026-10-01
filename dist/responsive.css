@@ -1,0 +1,80 @@
+body { overflow-x: hidden; }
+.live-diff {padding:14px 0;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
+.live-diff p {margin:6px 0}
+.live-diff small {line-height:1.6;color:#9db1c4}
+.profile-bar {padding:12px 16px;margin-bottom:18px;border:1px solid #705532;border-radius:12px;background:#211d17}
+.profile-bar label {display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.profile-bar small {display:block;color:#efc787;margin-top:6px;line-height:1.5}
+.fun-card {margin-bottom:14px}
+.fun-card header {display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.fun-card header > div {flex:1;min-width:180px}
+.fun-card p,.detail li {line-height:1.65}
+.fun-card ul {padding-left:22px}
+.fun-card .inline-form {flex-wrap:wrap;margin:12px 0}
+.fun-card small {display:block;color:#9db1c4}
+#splitTimes,#liveFlagChanges {overflow-x:auto}
+.split-table {border-collapse:collapse;width:100%;font-size:14px}
+.split-table th,.split-table td {padding:12px;border-bottom:1px solid #243646;text-align:left;vertical-align:top}
+.split-table td:first-child {min-width:230px}
+.detail select {width:100%;max-width:100%;min-width:0}
+.detail ul {padding-left:18px}
+.save-layout > *, .inventory-grid > *, .inventory-slot > *, .form-grid > *, .grid > *, .hero > *, .plot-row > * { min-width: 0; }
+.inventory-grid { grid-template-columns: minmax(0,1fr); }
+.inventory-slot { grid-template-columns: 38px minmax(0,1.35fr) minmax(0,1fr); }
+.inventory-slot select, .field select { width: 100%; min-width: 0; max-width: 100%; }
+.form-grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
+.plot-row { grid-template-columns: 75px 110px minmax(0,1fr) auto; }
+.plot-row p { overflow-wrap: anywhere; }
+.detail { min-width: 0; overflow-wrap: anywhere; }
+.split-panel { grid-template-columns: minmax(0,1.15fr) minmax(320px,1fr); }
+.table-wrap { min-width: 0; }
+.table-wrap table { table-layout: fixed; }
+.table-wrap th:nth-child(1) { width: 50px; }
+.table-wrap th:nth-child(2) { width: 80px; }
+.table-wrap th:nth-child(4) { width: 130px; }
+.table-wrap td { overflow-wrap: anywhere; }
+.hero-actions { flex-wrap: wrap; }
+
+@media (max-width: 900px) {
+  .app-shell { display: block; }
+  .sidebar { position: sticky; height: auto; top: 0; padding: 9px; display: block; border-right: 0; border-bottom: 1px solid var(--line); }
+  .brand, .sidebar-foot { display: none; }
+  .sidebar nav { flex-direction: row; overflow-x: auto; }
+  .nav-item { white-space: nowrap; padding: 8px; }
+  .nav-item span { display: none; }
+  main { padding: 0 14px 40px; overflow: hidden; }
+  .topbar { height: 78px; margin-bottom: 18px; }
+  .topbar p, .top-actions { display: none; }
+  .grid.two, .save-layout, .split-panel { grid-template-columns: 1fr; }
+  .split-panel { height: auto; }
+  .table-wrap { max-height: 55vh; }
+  .detail { border-left: 0; border-top: 1px solid var(--line); max-height: 500px; }
+  .save-sections { position: static; display: flex; flex-direction: row; overflow-x: auto; }
+  .section-intro, .hero { align-items: flex-start; flex-direction: column; }
+  .hero-actions { margin-top: 20px; }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .route-card { grid-template-columns: 38px minmax(0, 1fr) auto; }
+  .route-card > *:nth-child(4) { display: block; grid-column: 2 / -1; }
+  .route-card > *:nth-child(5) { display: block; grid-column: 2; }
+  .route-card > *:nth-child(6) { display: block; grid-column: 2; }
+  .route-card > :last-child { grid-column: 3; grid-row: 3 / span 2; align-self: end; }
+  .plot-row { grid-template-columns: 70px minmax(0, 1fr) auto; }
+  .plot-region { display: none; }
+  .inventory-grid { grid-template-columns: 1fr; }
+  .change-row { grid-template-columns: minmax(0, 1fr) 90px 20px 90px; }
+  .change-row span:last-child { grid-column: 1 / -1; }
+  .guide-grid { grid-template-columns: 1fr; }
+  .flow { align-items: stretch; }
+  .form-grid { grid-template-columns: 1fr; }
+  .field.wide { grid-column: auto; }
+}
+
+@media (max-width: 560px) {
+  .stats, .dev-grid, .memory-full { grid-template-columns: 1fr 1fr; }
+  .toolbar { align-items: stretch; flex-direction: column; }
+  .route-card { grid-template-columns: 34px minmax(0, 1fr); }
+  .route-card > :nth-child(3) { grid-column: 2; }
+  .route-card > :last-child { grid-column: 2; grid-row: auto; }
+  .modal { padding: 16px; }
+  .diff-item { grid-template-columns: 1fr 80px 18px 80px; }
+}
